@@ -40,5 +40,25 @@ module RealtimeBe
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # config/application.rb or config/environments/development.rb
+
+    config.cache_store = :redis_store, {
+      host: '172.22.141.134',
+      port: 6379,
+      db: 0,
+      namespace: 'your_app_name'
+    }
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins 'http://localhost:3001' # Update with your React app's URL
+        resource '*',
+          headers: :any,
+          methods: [:get, :post, :put, :patch, :delete, :options, :head],
+          credentials: true,
+          websockets: true
+      end
+    end
   end
 end
